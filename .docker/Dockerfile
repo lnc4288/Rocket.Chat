@@ -3,8 +3,11 @@ FROM rocketchat/base:8
 ENV RC_VERSION 0.63.0-develop
 
 COPY ./rocketchatbundle /app 
-WORKDIR /app/programs/server
-RUN npm install --production
+
+RUN cd /app/bundle/programs/server \
+  && npm install --production
+
+WORKDIR /app
 
 USER rocketchat
 
@@ -21,4 +24,4 @@ ENV DEPLOY_METHOD=docker \
 
 EXPOSE 3000
 
-CMD ["node", "./bundle/main.js"]
+CMD ["node", "bundle/main.js"]
