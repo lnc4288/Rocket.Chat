@@ -5,7 +5,8 @@ ENV RC_VERSION 0.63.0-develop
 COPY ./rocketchatbundle /app 
 
 RUN cd /app/bundle/programs/server \
-  && npm install --production
+  && npm install --production \
+  && npm rebuild 
 
 WORKDIR /app
 
