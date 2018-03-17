@@ -2,13 +2,17 @@ FROM rocketchat/base:8
 
 ENV RC_VERSION 0.63.0-develop
 
-COPY ./rocketchatbundle /app 
-
-RUN cd /app/bundle/programs/server \
-  && npm install --production \
-  && npm rebuild 
+COPY ./bundle /app 
 
 WORKDIR /app
+
+RUN cd /app/bundle/programs/server \
+  && npm cache clean --force \
+  && npm install \
+  && npm install bcrypt \
+  && npm install sharp \
+  && npm install fibers \
+  && npm rebuild
 
 USER rocketchat
 
@@ -25,4 +29,4 @@ ENV DEPLOY_METHOD=docker \
 
 EXPOSE 3000
 
-CMD ["node", "bundle/main.js"]
+CMD ["node", "./bundle/main.js"]
