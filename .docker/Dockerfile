@@ -2,21 +2,25 @@ FROM rocketchat/base:8
 
 ENV RC_VERSION 0.63.0-develop
 
-COPY ./bundle /app 
+MAINTAINER buildmaster@rocket.chat
 
-WORKDIR /app
-
-RUN cd /app/bundle/programs/server \
-  && npm cache clean --force \
-  && npm install \
-  && npm install bcrypt \
-  && npm install sharp \
-  && npm install fibers \
-  && npm rebuild
+RUN set -x \
+ && curl -SLf "https://releases.rocket.chat/${RC_VERSION}/download/" -o rocket.chat.tgz \
+ && curl -SLf "https://releases.rocket.chat/${RC_VERSION}/asc" -o rocket.chat.tgz.asc \
+ && gpg --verify rocket.chat.tgz.asc \
+ && mkdir -p /app \
+ && tar -zxf rocket.chat.tgz -C /app \
+ && rm rocket.chat.tgz rocket.chat.tgz.asc \
+ && cd /app/bundle/programs/server \
+ && npm install \
+ && npm cache clear --force \
+ && chown -R rocketchat:rocketchat /app
 
 USER rocketchat
 
 VOLUME /app/uploads
+
+WORKDIR /app/bundle
 
 # needs a mongoinstance - defaults to container linking with alias 'mongo'
 ENV DEPLOY_METHOD=docker \
@@ -29,4 +33,40 @@ ENV DEPLOY_METHOD=docker \
 
 EXPOSE 3000
 
-CMD ["node", "./bundle/main.js"]
+CMD ["node", "main.js"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

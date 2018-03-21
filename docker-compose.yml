@@ -3,7 +3,7 @@ version: '2'
 services:
   rocketchat:
     # image: rocketchat/rocket.chat:latest
-    image: hivemindapps/rocketchat
+    image: hivemindapps/rocketchat:test
     restart: unless-stopped
     volumes:
       - ./uploads:/app/uploads
